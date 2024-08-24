@@ -1,6 +1,6 @@
 export const ScrollWrapper = (props) => {
-    const { children } = props;
-    return (<div className="grid grid-cols-3 gap-8">
+    const { children, className } = props;
+    return (<div className={`grid grid-cols-2 gap-4 sm:grid-cols-3 ${className}`}>
         {children}
     </div>)
 }
