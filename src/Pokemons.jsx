@@ -9,13 +9,9 @@ import { InfiniteLoader } from "./InfiniteLoader";
 const getNextTenPokemons = lazyGetPokemons(12);
 export const Pokemons = () => {
   const [pokemons, setPokemons] = useState({});
-  const [search, setSearch] = useState(0);
 
   const handlePokemonResponse = debounce(() => {
-    setSearch((last) => last + 1);
-  });
-
-  useEffect(() => {
+    // setSearch((last) => last + 1);
     getNextTenPokemons().then((res) => {
       setPokemons((prev) => {
         if (prev.next !== res.next) {
@@ -27,29 +23,38 @@ export const Pokemons = () => {
         return prev;
       });
     });
-  }, [search]);
+  });
+
+  useEffect(() => {
+    handlePokemonResponse();
+  }, []);
 
   return (
     <div className=" flex flex-col min-w-fit min-h-dvh justify-center items-center">
-      <ScrollWrapper className="mt-96">
-        {pokemons?.results?.map((pokemon) => {
-          return <Card key={pokemon.url} title={pokemon.name} />;
-        })}
-      </ScrollWrapper>
-      {pokemons.next ? (
+      {Object.keys(pokemons).length > 0 ? (
         <>
-          <InfiniteLoader api={handlePokemonResponse} />
-          <button
-            onClick={handlePokemonResponse}
-            className="m-12 underline cursor-pointer"
-          >
-            load more
-          </button>
+          <ScrollWrapper className="mt-96">
+            {pokemons?.results?.map((pokemon) => {
+              return <Card key={pokemon.url} title={pokemon.name} />;
+            })}
+          </ScrollWrapper>
+          {pokemons.next ? (
+            <>
+              <InfiniteLoader api={handlePokemonResponse} />
+              <button
+                onClick={handlePokemonResponse}
+                className="m-12 underline cursor-pointer"
+              >
+                load more
+              </button>
+            </>
+          ) : (
+            <p className="m-12">{getCompletedMessage()}</p>
+          )}
         </>
       ) : (
-        <p className="m-12">{getCompletedMessage()}</p>
+        <InfiniteLoader />
       )}
     </div>
   );
-}
-
+};

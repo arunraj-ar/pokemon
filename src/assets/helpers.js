@@ -1,7 +1,6 @@
-export const lazyAPI = (api, limit) => {
+export const paginateAPI = (api, limit) => {
   let called = 0;
   return async () => {
-    console.log(`laxyAPI called for: ${called}`);
     const res = await api(limit, called * limit);
     called = called + 1;
     return res;
@@ -41,3 +40,15 @@ export const getCompletedMessage = () => {
   ];
   return messages[Math.floor(Math.random() * messages.length)];
 };
+
+export const getTextInLocale = (translations = []) => {
+    const lang = getUserLanguage();
+  return translations.filter((item) => item?.language?.name === lang)[0]?.name ||
+  "";
+}
+
+
+export const getUserLanguage = () => {
+    const lang = 'en' || navigator.language || navigator.userLanguage; //save user language to localStorage
+    return lang
+}
