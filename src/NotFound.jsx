@@ -1,16 +1,32 @@
 import { useEffect, useState } from "react";
-import { getTextInLocale } from "./assets/helpers";
+import { getTextInLocale, throttle } from "./assets/helpers";
 import { getRandomRegion } from "./api/pokeAPI";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 export const NotFound = () => {
   const [regionInfo, setRegionInfo] = useState({});
+
+  const [regions, setRegions] = useLocalStorage("regions",[]);
+
   useEffect(() => {
     const getRegion = async () => {
       const randomRegion = await getRandomRegion();
       setRegionInfo(randomRegion);
+      const regionName = getTextInLocale(randomRegion?.names, "en")
+      if(!regions.includes(regionName)) {
+        setRegions([...regions, regionName])
+      }
     };
-    getRegion();
+    throttle(getRegion());
   }, []);
+
+  const getRegionName = () => {
+    if(regions.length > 5) {
+      return regions[Math.floor(Math.random() * regions.length)]
+    }
+    return getTextInLocale(regionInfo?.names, "en");
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-dvh text-center">
       <div className="w-fit flex flex-col items-center justify-center">
@@ -22,11 +38,13 @@ export const NotFound = () => {
           />
         </div>
         <h2 className="m-2 text-5xl">Page Not Found</h2>
-        <h3 className="mt-8 text-xl sm:text-2xl lg:text-3xl">you have reached an unknown region😱</h3>
+        <h3 className="mt-8 text-xl sm:text-2xl lg:text-3xl">
+          you have reached an unknown region😱
+        </h3>
         <p className="text-xs sm:text-sm lg:text-lg">
           would you like to explore{" 👉"}
           <a className="underline cursor-pointer">
-            {getTextInLocale(regionInfo?.names, "en")}
+            {getRegionName()}
           </a>
           {"👈 "}
           region instead?

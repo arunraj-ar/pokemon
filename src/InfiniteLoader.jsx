@@ -12,7 +12,6 @@ export const InfiniteLoader = (props) => {
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              console.log("intersecting");
               typeof api === "function" && api();
             }
           });
