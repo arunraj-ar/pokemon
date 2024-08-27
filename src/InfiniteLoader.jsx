@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export const InfiniteLoader = (props) => {
+const InfiniteLoader = (props) => {
   const { api = null } = props;
   const [isObserverLoaded, setIsObserverLoaded] = useState(false);
   const loaderRef = useRef(null);
@@ -33,3 +33,5 @@ export const InfiniteLoader = (props) => {
     </div>
   );
 };
+
+export default InfiniteLoader;

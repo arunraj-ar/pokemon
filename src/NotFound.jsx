@@ -3,29 +3,29 @@ import { getTextInLocale, throttle } from "./assets/helpers";
 import { getRandomRegion } from "./api/pokeAPI";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 
-export const NotFound = () => {
+const NotFound = () => {
   const [regionInfo, setRegionInfo] = useState({});
 
-  const [regions, setRegions] = useLocalStorage("regions",[]);
+  const [regions, setRegions] = useLocalStorage("regions", []);
 
   useEffect(() => {
     const getRegion = async () => {
       const randomRegion = await getRandomRegion();
       setRegionInfo(randomRegion);
-      const regionName = getTextInLocale(randomRegion?.names, "en")
-      if(!regions.includes(regionName)) {
-        setRegions([...regions, regionName])
+      const regionName = getTextInLocale(randomRegion?.names, "en");
+      if (!regions.includes(regionName)) {
+        setRegions([...regions, regionName]);
       }
     };
     throttle(getRegion());
   }, []);
 
   const getRegionName = useCallback(() => {
-    if(regions.length > 5) {
-      return regions[Math.floor(Math.random() * regions.length)]
+    if (regions.length > 5) {
+      return regions[Math.floor(Math.random() * regions.length)];
     }
     return getTextInLocale(regionInfo?.names, "en");
-  },[regions, regionInfo])
+  }, [regions, regionInfo]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-dvh text-center">
@@ -43,9 +43,7 @@ export const NotFound = () => {
         </h3>
         <p className="text-xs sm:text-sm lg:text-lg">
           would you like to explore{" 👉"}
-          <a className="underline cursor-pointer">
-            {getRegionName()}
-          </a>
+          <a className="underline cursor-pointer">{getRegionName()}</a>
           {"👈 "}
           region instead?
         </p>
@@ -53,3 +51,5 @@ export const NotFound = () => {
     </div>
   );
 };
+
+export default NotFound;

@@ -1,4 +1,4 @@
-export const Card = (props) => {
+const Card = (props) => {
   const { title = "" } = props;
   return (
     <div className="border p-4 h-72 w-auto sm:w-52">
@@ -6,3 +6,5 @@ export const Card = (props) => {
     </div>
   );
 };
+
+export default Card;

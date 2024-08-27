@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { lazyGetPokemons } from "./api/pokeAPI";
 import { debounce, getCompletedMessage } from "./assets/helpers";
-import { Card } from "./Card";
-import { ScrollWrapper } from "./ScrollWrapper";
-import { InfiniteLoader } from "./InfiniteLoader";
+import Card from "./Card";
+import ScrollWrapper from "./ScrollWrapper";
+import InfiniteLoader from "./InfiniteLoader";
 
 const getNextPokemons = lazyGetPokemons(12);
-export const Pokemons = () => {
+const Pokemons = () => {
   const [pokemons, setPokemons] = useState({});
 
   const handlePokemonResponse = debounce(() => {
@@ -56,3 +56,5 @@ export const Pokemons = () => {
     </div>
   );
 };
+
+export default Pokemons;
