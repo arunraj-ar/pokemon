@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getTextInLocale, throttle } from "./assets/helpers";
 import { getRandomRegion } from "./api/pokeAPI";
 import { useLocalStorage } from "./hooks/useLocalStorage";
@@ -20,12 +20,12 @@ export const NotFound = () => {
     throttle(getRegion());
   }, []);
 
-  const getRegionName = () => {
+  const getRegionName = useCallback(() => {
     if(regions.length > 5) {
       return regions[Math.floor(Math.random() * regions.length)]
     }
     return getTextInLocale(regionInfo?.names, "en");
-  }
+  },[regions, regionInfo])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-dvh text-center">
